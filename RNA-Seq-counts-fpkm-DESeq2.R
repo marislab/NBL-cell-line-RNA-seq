@@ -75,9 +75,16 @@ save(fpkm_matrix,file=paste(Sys.Date(), "-fpkm_matrix_all_celllines.rda",
 #read in MYCN status
 mycn <- read.delim("2016-11-17-CellLine-MYCN-status.txt", sep = "\t", header = T)
 
+#remove RPE1 and human fetal brain from analysis
+#counts <- read.delim("~/Box Sync/Maris_Lab/Manuscripts/Harenza_NBLCellLines_ScientificData/Archive/2016-11-17-CellLineSTAR-counts_2pass_matrix.txt", sep = "\t", header = T)
+
+new.mycn <- subset(mycn, CellLine != "RPE1" & CellLine != "HU.FETAL.BRAIN")
+new.counts<- counts[ , -which(colnames(counts) %in% c("RPE1", "HU.FETAL.BRAIN"))]
+dim(new.counts)
+
 ##construct DESeq dataset for MYCN status:
-dataset <- DESeqDataSetFromMatrix(countData = cntgenes,
-                                  colData = mycn,
+dataset <- DESeqDataSetFromMatrix(countData = new.counts,
+                                  colData = new.mycn,
                                   design = ~ Status)
 
 ##remove rows with 0 reads
@@ -104,8 +111,8 @@ plotMA(res, main="DESeq2", ylim=c(-2,2))
 res.1 <- subset(resOrdered, padj < 0.1)
 
 #save table
-write.table(as.data.frame(res.1),
-            file="DiffExp_MYCN_adjp.10.txt", row.names = T, quote = F, sep = "\t")
+write.table(as.data.frame(res.1), paste(Sys.Date(), "-DiffExp_MYCN_adjp.10.txt",
+                                        sep = ""), row.names = T, quote = F, sep = "\t")
 
 #for list of genes
 diffexpgenes <- sort(as.factor(rownames(res.1)))
