@@ -23,5 +23,5 @@ The repository contains methods for aligning RNA-Seq data using STAR and using S
 Data Access
 =======
 
-GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89413
-Figshare: https://figshare.com/articles/STAR-reads/7613975
+- GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE89413
+- Figshare: https://figshare.com/articles/STAR-reads/7613975
